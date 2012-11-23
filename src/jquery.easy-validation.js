@@ -26,7 +26,7 @@
  * 
  **/
 
-(function( $, document, UA ){
+(function( $, document, window, UA ){
 	
 	var FALSE = false,
 		TRUE = true,
@@ -88,7 +88,8 @@
 				$error	= $('<strong class="error-message"/>'),
 				empty	= $form.data(EMPTY) || DEFAULT_EMPTY_MSG,
 				invalid = $form.data(INVALID) || DEFAULT_INVALID_MSG,
-				error	= FALSE; // optimism
+				error	= FALSE, // optimism
+				$first  = $([]);
 
 			$form
 				// cleanup
@@ -116,6 +117,10 @@
 									$container.addClass( ERROR )
 								 );
 							error = TRUE;
+							if ( ! $first.length )
+							{
+								$first = $field;
+							}
 						}
 						// not required or not empty
 						else
@@ -133,10 +138,21 @@
 											$container.addClass( ERROR )
 										 );
 									error = TRUE;
+									if ( ! $first.length )
+									{
+										$first = $field;
+									}
 								}
 							}
 						}
 					 });
+					
+			// scroll to the first error
+			if ( $first.length )
+			{
+				window.scrollTo( $first.offset().top );
+			}
+			
 			return ! error;
 		});		
 
@@ -172,6 +188,8 @@
 						
 					this.setCustomValidity( msg );
 					
+					window.scrollTo( $this.offset().top );
+					
 				 })
 				// reset
 				.on( 'change', function(){
@@ -191,4 +209,4 @@
 	}
 	
 	
-})( jQuery, document, navigator.userAgent.toLowerCase() );
+})( jQuery, document, window, navigator.userAgent.toLowerCase() );
