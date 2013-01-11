@@ -36,7 +36,7 @@
 		INVALID = ERROR + '-invalid',
 		DEFAULT_EMPTY_MSG = 'This field cannot be left blank',
 		DEFAULT_INVALID_MSG = 'This field is not properly formatted',
-		container = 'form > ol > li, .form-item',
+		container = 'form > ol > li, fieldset > ol > li, .form-item',
 		
 		// borrowed from Modernizr
 		html5_validation = (function( props ){
@@ -169,6 +169,7 @@
 	{
 		if ( html5_validation )
 		{
+			// console.log('html 5');
 			// custom error messaging
 			$( 'input,select,textarea' )
 				// handle invalidity
@@ -193,8 +194,6 @@
 						.addClass( ERROR );
 						
 					this.setCustomValidity( msg );
-					
-					window.scrollTo( $this.offset().top );
 					
 				 })
 				// reset
