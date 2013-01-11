@@ -43,8 +43,9 @@
 			var supported = {},
 				input	= document.createElement('input');
 
-			//IE8 fibs. This test ensures it reports false
-            if (typeof(input.setCustomValidity) != 'function') {
+			// IE8+ fibs. This test ensures it reports false
+            if ( typeof(input.setCustomValidity) != 'function' )
+			{
                 return FALSE;
             }
             
