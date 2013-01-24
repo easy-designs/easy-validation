@@ -26,7 +26,7 @@
  * 
  **/
 
-(function( $, document, window, UA ){
+(function( $, document, window, UA, UNDEFINED ){
 	
 	var FALSE = false,
 		TRUE = true,
@@ -36,7 +36,7 @@
 		INVALID = ERROR + '-invalid',
 		DEFAULT_EMPTY_MSG = 'This field cannot be left blank',
 		DEFAULT_INVALID_MSG = 'This field is not properly formatted',
-		container = 'form > ol > li, fieldset > ol > li, .form-item',
+		container = 'form > ol > li, fieldset > ol > li',
 		
 		// borrowed from Modernizr
 		html5_validation = (function( props ){
@@ -112,7 +112,30 @@
 							$container = $field.closest( container ),
 							val	= $field.val(),
 							r, e; 
-
+						
+						// skip already errored groups
+						if ( $field.is(':checkbox,:radio') &&
+						 	 $container.hasClass( ERROR ) )
+						{
+							return;
+						}
+						
+						// additional value checks for multi-selects and radios & checkboxes
+						switch ( TRUE )
+						{
+							case $field.is('select[multiple]'):
+								val = $field.find('option:selected').val();
+								break;
+							case $field.is(':checkbox'):
+							case $field.is(':radio'):
+								val = $('[name=' + $field.attr('name') + ']:checked').val();
+								break;
+						}
+						if ( val == UNDEFINED )
+						{
+							val = '';
+						}
+						
 						if ( $field.is('[required]') && val == '' )
 						{
 							e = $field.data( EMPTY ) || empty;
@@ -123,7 +146,7 @@
 									$container.addClass( ERROR )
 								 );
 							error = TRUE;
-							if ( ! $first.length )
+							if ( $first.length < 1 )
 							{
 								$first = $field;
 							}
@@ -144,7 +167,7 @@
 											$container.addClass( ERROR )
 										 );
 									error = TRUE;
-									if ( ! $first.length )
+									if ( $first.length < 1 )
 									{
 										$first = $field;
 									}
@@ -156,7 +179,7 @@
 			// scroll to the first error
 			if ( $first.length )
 			{
-				window.scrollTo( $first.offset().top );
+				$(window).scrollTop( $first.offset().top );
 			}
 			
 			return ! error;
