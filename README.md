@@ -24,6 +24,6 @@ whole or individual fields:
    When used on a form, it prescribes a global default message for all fields 
    that are invalid when empty; when used on a field, it provides a field-specific
    error message when empty.
- - The `data-validaiton-error-invalid` attribute
+ - The `data-validation-error-invalid` attribute
    When used on a form, it prescribes a global default message for all fields that 
    are invalid; when used on a field, it provides a field-specific error message when invalid.
